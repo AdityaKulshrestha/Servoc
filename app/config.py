@@ -1,0 +1,2 @@
+BATCH_SIZE = 16
+BATCH_TIMEOUT = 0.1  # in seconds
