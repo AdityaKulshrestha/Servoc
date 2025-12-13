@@ -50,7 +50,7 @@ class InferenceEngine:
             raise RuntimeError("Inference engine is not initialized")
         
         batch_size = inputs.size(0)
-        logger.debug(f"Running inference on batch size: {batch_size}")
+        logger.info(f"Running inference on batch size: {batch_size}")
 
         # TODO: Replace with actual model inference 
         outputs = inputs * 2 + 1

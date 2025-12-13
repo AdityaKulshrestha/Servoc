@@ -61,7 +61,7 @@ class DynamicBatcher:
                 batch = await self._collect_batch()
                 if batch:
                     await self._process_batch(batch)
-            except asyncio.CanclledError:
+            except asyncio.CancelledError:
                 break
             except Exception as e:
                 logger.error(f"Error in batch loop: {e}")
