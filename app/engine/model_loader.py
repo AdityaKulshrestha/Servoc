@@ -1,13 +1,19 @@
-import torch
+import logging 
+from typing import Any, Optional
+from pathlib import Path
 
 
-# Load your model here
+logger = logging.getLogger(__name__)
 
-class Model:
-    def __init__(self):
-        # Dummy model for illustration; replace with actual model loading
-        self.model = torch.nn.Linear(10, 2)  # Example model
 
-    def predict(self, input_data: torch.Tensor) -> torch.Tensor:
-        with torch.no_grad():
-            return self.model(input_data)
+def load_model(model_path: Optional[str] = None, device: str = "cpu") -> Any:
+    """
+    Load a model from disk
+    """
+
+    if model_path is None:
+        raise ValueError("No model path provided")
+    
+    # TODO: Implement actual model
+
+    raise NotImplementedError("Model loading not implemented")
