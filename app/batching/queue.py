@@ -1,16 +1,20 @@
 import asyncio 
 from dataclasses import dataclass 
-from typing import Any
+from typing import Any, Optional
 import torch
+import numpy as np
 
 
 @dataclass
 class InferenceRequest:
     """Data class representing an inference request."""
     request_id: str
-    input_data: torch.Tensor
+    audio: np.ndarray
+    sample_rate: int
+    duration: float
     future: asyncio.Future
     timestamp: float
+    metadata: Optional[dict] = None
 
 
 class RequestQueue:

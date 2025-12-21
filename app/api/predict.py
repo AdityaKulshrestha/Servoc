@@ -2,12 +2,16 @@ import asyncio
 import time
 import uuid
 import logging
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import (
+    APIRouter, HTTPException, 
+    UploadFile, Form, File
+)
 import torch
 
-from app.api.models import PredictRequest, PredictResponse
+from app.utils.audio import decode_audio
+from app.api.models import TranscriptionResponse
 from app.batching.queue import request_queue, InferenceRequest
 
 
@@ -17,8 +21,16 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.post("/audio/transcription", response_model=PredictResponse)
-async def predict(request: PredictRequest):
+@router.post("/audio/transcriptions", response_model=TranscriptionResponse)
+async def transcribe(
+        file: UploadFile = File(...),
+        model: str = Form(..., description="ID of the model to use (e.g., whisper-1)"),
+        language: Optional[str] = Form(None, description="ISO-639-1 language code (e.g. 'en')"),
+        prompt: Optional[str] = Form(None, description="Optional text to guide style or continue audio"),
+        response_format: Optional[str] = Form("json", description="json, text, srt, verbose_json, or vtt"),
+        temperature: Optional[float] = Form(0.0, description="Sampling temperature, between 0 and 1"),
+        timestamp_granularities: Optional[List[str]] = Form(None, description="['word'] or ['segment']")
+    ):
     """
     Submit an inference request
     """
@@ -26,8 +38,11 @@ async def predict(request: PredictRequest):
     start_time = time.perf_counter()
     request_id = str(uuid.uuid4())[:8]
 
-    try:
-        input_data = torch.tensor(request.input_vector, dtype=torch.float32)
+    try:        
+        file_bytes = await file.read()
+
+        # Decoding audio to numpy
+        audio_sample = await decode_audio(file_bytes, target_sample_rate=16000)
         
         loop = asyncio.get_event_loop()
         future = loop.create_future()
@@ -36,23 +51,27 @@ async def predict(request: PredictRequest):
         # Create request object
         inference_request = InferenceRequest(
             request_id=request_id,
-            input_data=input_data,
+            audio=audio_sample.audio,
+            sample_rate=audio_sample.sample_rate,
+            duration=audio_sample.duration,
             future=future,
-            timestamp=time.perf_counter()
+            timestamp=time.perf_counter(),
         )
 
         await request_queue.put(inference_request)
         logger.info(f"Request {request_id} enqueued")
 
         # Await the result
-        result = await future
+        transcription = await future
 
         latency_ms = (time.perf_counter() - start_time) * 1000
 
-        return PredictResponse(
-            request_id=request_id,
-            prediction=result.tolist(),
-            latency_ms=latency_ms
+        return TranscriptionResponse(
+            text=transcription,
+            usage={
+                "audio_seconds": audio_sample.duration,
+                "latency_ms": latency_ms
+            }
         )
 
     except Exception as e:

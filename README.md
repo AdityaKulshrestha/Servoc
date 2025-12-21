@@ -27,3 +27,18 @@ To run the benchmark tests, execute the following command:
     ```bash
     locust -f ./test.py --headless -u 20 -r 5 -H http://localhost:8080
     ```
+
+
+## TODOs
+- [ ] Add Whisper model support
+    - [x] Add support for sending audios using openai client
+    - [x] Change response schema to openai
+    - [ ] Add functionality to convert the audio bytes to numpy/tensor.
+- [ ] Test the initial whisper model support
+- [ ] Add IndicParler TTS
+- [ ] Evaluate the performance on IndicParler TTS
+- [ ] Add script for automated deployments using core load and stress testing
+- [ ] Add nginx for load balancing based on custom logic of core scaling
+- [ ] Add Dockerfile for containerized deployments with CPU core pinning and NUMA awareness
+- [ ] Add Kubernetes manifests for orchestrated deployments with resource management
+- [ ] Add monitoring using Prometheus and Grafana for real-time performance tracking

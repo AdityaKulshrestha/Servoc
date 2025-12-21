@@ -3,8 +3,8 @@ import time
 import torch
 from typing import Optional
 
-
 from app.config import EngineConfig
+from app.engine.model_loader import load_model
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class InferenceEngine:
         logger.info("Initializing inference engine")
 
         # TODO: Load the actual model here
-        # self.model = load_model()
+        self.model = load_model(self.config)
 
         self._initialized = True
         logger.info("Inference engine intialized")
@@ -49,14 +49,16 @@ class InferenceEngine:
         if not self._initialized:
             raise RuntimeError("Inference engine is not initialized")
         
-        batch_size = inputs.size(0)
+        batch_size = len(inputs)
         logger.info(f"Running inference on batch size: {batch_size}")
-
-        # TODO: Replace with actual model inference 
-        outputs = inputs * 2 + 1
-
-        time.sleep(0.01)
-
+        
+        # TODO: Replace with actual model inference with parallelization
+        outputs = []
+        for i in range(batch_size):
+            outputs.append(self.model.transcribe(inputs[i]))
+        
+        logger.info(f"Output: {outputs}")
+        
         return outputs
     
 

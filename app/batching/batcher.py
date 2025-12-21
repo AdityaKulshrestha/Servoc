@@ -106,8 +106,8 @@ class DynamicBatcher:
         logger.debug(f"Processing batch of size {len(batch)}")
 
         try:
-            # Stack inputs into a single tensor
-            inputs = torch.stack([req.input_data for req in batch])
+            # TODO: Stack the inputs (bytes) before passing to the model runner
+            inputs = [req.audio for req in batch]
 
             # Run inference (in thread pool to not block event loop)
             loop = asyncio.get_event_loop()

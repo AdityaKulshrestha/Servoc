@@ -13,7 +13,8 @@ class BatcherConfig:
 @dataclass
 class EngineConfig:
     """Configuration for the inference engine"""
-    model_path: Optional[str] = None
+    model_path: Optional[str] = "openai/whisper-large-v3"
+    model_type: str = "whisper"
     device: str = "cpu"
     num_threads: int = 4
 
@@ -28,9 +29,6 @@ class ServerConfig:
     batcher: BatcherConfig = BatcherConfig()
     engine: EngineConfig = EngineConfig() 
 
-    # def __post_init__(self):
-        # if self.engine.model_path is None:
-            # raise ValueError("Model path must be specified in EngineConfig")  
 
 
 config = ServerConfig()
