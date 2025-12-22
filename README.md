@@ -34,7 +34,7 @@ To run the benchmark tests, execute the following command:
     - [x] Add support for sending audios using openai client
     - [x] Change response schema to openai
     - [x] Add functionality to convert the audio bytes to numpy/tensor.
-    - [ ] Add True batching in whisper model inference
+    - [x] Add True batching in whisper model inference
 - [ ] Test the initial whisper model support
 - [ ] Add IndicParler TTS
 - [ ] Evaluate the performance on IndicParler TTS

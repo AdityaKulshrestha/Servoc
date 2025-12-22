@@ -60,13 +60,13 @@ class WhisperSTTEngine(STTEngine):
         Returns:
             Transcribed text.
         """
+        # Pads the input audio and converts to input features
         inputs_features = self.processor(inputs, sample_rate=self.sample_rate, return_tensors="pt").input_features
         with torch.no_grad(), torch.amp.autocast('cpu'):
             predicted_ids = self.model.generate(inputs_features)
 
         transcription = self.processor.batch_decode(predicted_ids, skip_special_tokens=True)
-        # TODO: Remove the indexing, for TRUE parallel
-        return transcription[0]
+        return transcription
 
         
 

@@ -52,14 +52,9 @@ class InferenceEngine:
         batch_size = len(inputs)
         logger.info(f"Running inference on batch size: {batch_size}")
         
-        # TODO: Replace with actual model inference with parallelization
-        outputs = []
-        for i in range(batch_size):
-            outputs.append(self.model.transcribe(inputs[i]))
+        response = self.model.transcribe(inputs)
         
-        logger.info(f"Output: {outputs}")
-        
-        return outputs
+        return response
     
 
     def shutdown(self):
