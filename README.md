@@ -28,18 +28,28 @@ To run the benchmark tests, execute the following command:
     locust -f ./test.py --headless -u 20 -r 5 -H http://localhost:8080
     ```
 
+## Docker Deployment
+To deploy the application using Docker, follow these steps:
+1. Build the Docker image
+    ```bash
+    docker build -t servoc:latest .
+    ```
+2. Run the Docker container
+    ```bash
+    docker run -d -p 8080:8080 --cpuset-cpus="0-31" --cpuset-mems="0" --privileged --name servoc_container servoc:latest
+    ```
 
 ## TODOs
-- [ ] Add Whisper model support
+- [x] Add Whisper model support
     - [x] Add support for sending audios using openai client
     - [x] Change response schema to openai
     - [x] Add functionality to convert the audio bytes to numpy/tensor.
     - [x] Add True batching in whisper model inference
-- [ ] Test the initial whisper model support
+- [x] Test the initial whisper model support
+- [x] Add Dockerfile for containerized deployments with CPU core pinning and NUMA awareness
+- [ ] Add ~~nginx~~HAProxy for load balancing based on custom logic of core utilization
 - [ ] Add IndicParler TTS
 - [ ] Evaluate the performance on IndicParler TTS
 - [ ] Add script for automated deployments using core load and stress testing
-- [ ] Add nginx for load balancing based on custom logic of core scaling
-- [ ] Add Dockerfile for containerized deployments with CPU core pinning and NUMA awareness
 - [ ] Add Kubernetes manifests for orchestrated deployments with resource management
 - [ ] Add monitoring using Prometheus and Grafana for real-time performance tracking
