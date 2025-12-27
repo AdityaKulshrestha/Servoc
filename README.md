@@ -39,6 +39,20 @@ To deploy the application using Docker, follow these steps:
     docker run -d -p 8080:8080 --cpuset-cpus="0-31" --cpuset-mems="0" --privileged --name servoc_container servoc:latest
     ```
 
+## Architecture
+1. HAProxy with custom load balancing logic based on CPU core utilization.
+2. Python daemon to monitor CPU core usage and provide metrics to HAProxy.
+3. FastAPI application serving the voice models with CPU core pinning and NUMA awareness.
+    i. Request is received by FastAPI app.
+    ii. The request is preprocessed and added to a Inference queue.
+    iii. A pool of worker processes (each pinned to specific CPU cores) fetch requests from the queue and perform inference.
+    iv. The requests are batched based on 
+        - Maximum batch size
+        - Maximum wait time
+    v. The inference results are sent back to the FastAPI app which postprocesses and returns the response.
+
+    Reference - https://chatgpt.com/share/694a31d0-efc4-8005-a232-8e717f32d6c8
+
 ## TODOs
 - [x] Add Whisper model support
     - [x] Add support for sending audios using openai client
@@ -47,7 +61,7 @@ To deploy the application using Docker, follow these steps:
     - [x] Add True batching in whisper model inference
 - [x] Test the initial whisper model support
 - [x] Add Dockerfile for containerized deployments with CPU core pinning and NUMA awareness
-- [ ] Add ~~nginx~~HAProxy for load balancing based on custom logic of core utilization
+- [x] Add ~~nginx~~HAProxy for load balancing based on custom logic of core utilization
 - [ ] Add IndicParler TTS
 - [ ] Evaluate the performance on IndicParler TTS
 - [ ] Add script for automated deployments using core load and stress testing
