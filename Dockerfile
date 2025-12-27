@@ -6,9 +6,13 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+    build-essential && apt install -y libtcmalloc-minimal4 google-perftools\
     curl \
     && rm -rf /var/lib/apt/lists/*
+
+
+# Use tcmalloc for better performance
+ENV LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4"
 
 # Copy the application code
 COPY . .

@@ -3,6 +3,7 @@ import numpy as np
 from typing import List, Dict
 from ..base import STTEngine
 
+import intel_extension_for_pytorch as ipex
 from transformers import WhisperForConditionalGeneration, WhisperProcessor
 
 
@@ -29,6 +30,10 @@ class WhisperSTTEngine(STTEngine):
         # Move to device and set eval mode
         self.model = self.model.to(self.device)
         self.model.eval()
+
+        # IPEX optimization
+        self.model = ipex.optimize(self.model, dtype=torch.bfloat16)
+        self.model = torch.compile(self.model, backend="ipex")
 
         self._is_loaded = True
     
