@@ -36,7 +36,7 @@ To deploy the application using Docker, follow these steps:
     ```
 2. Run the Docker container
     ```bash
-    docker run -d -p 8080:8080 --cpuset-cpus="0-31" --cpuset-mems="0" --privileged --name servoc_container servoc:latest
+    docker run -d -p 8080:8080 -p 5555:5555 --cpuset-cpus="0-31" --cpuset-mems="0" --privileged --name servoc_container servoc:latest
     ```
 
 ## Architecture

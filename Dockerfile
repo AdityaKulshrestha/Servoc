@@ -21,7 +21,11 @@ COPY . .
 RUN uv sync --no-dev
 
 # Expose the port Uvicorn will run on
-EXPOSE 8080
+EXPOSE 8080 5555
+
+# Make the start script executable
+RUN chmod +x ./deployment/scripts/start_server.sh
 
 # Run the FastAPI app with Uvicorn
-CMD ["uv", "run", "python", "main.py"]
+# CMD ["uv", "run", "python", "main.py"]
+CMD ["./deployment/scripts/start_server.sh"]

@@ -2,9 +2,13 @@ import torch
 import numpy as np
 from typing import List, Dict
 from ..base import STTEngine
+import logging
 
 import intel_extension_for_pytorch as ipex
 from transformers import WhisperForConditionalGeneration, WhisperProcessor
+
+
+logger = logging.getLogger(__name__)
 
 
 # Add a model registry
@@ -33,7 +37,7 @@ class WhisperSTTEngine(STTEngine):
 
         # IPEX optimization
         self.model = ipex.optimize(self.model, dtype=torch.bfloat16)
-        self.model = torch.compile(self.model, backend="ipex")
+        # self.model = torch.compile(self.model, backend="ipex")
 
         self._is_loaded = True
     
