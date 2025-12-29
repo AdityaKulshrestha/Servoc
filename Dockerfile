@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential && apt install -y libtcmalloc-minimal4 google-perftools\
+    build-essential && apt install -y libtcmalloc-minimal4 google-perftools libsox-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
@@ -18,7 +18,8 @@ ENV LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libtcmalloc.so.4"
 COPY . .
 
 # Install the dependencies
-RUN uv sync --no-dev
+# RUN uv sync --no-dev
+RUN uv sync --group springlab-wav2vec2
 
 # Expose the port Uvicorn will run on
 EXPOSE 8080 5555

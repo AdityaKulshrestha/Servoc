@@ -53,6 +53,29 @@ To deploy the application using Docker, follow these steps:
 
     Reference - https://chatgpt.com/share/694a31d0-efc4-8005-a232-8e717f32d6c8
 
+
+## Development Guide
+- Use Makefile for easy setup
+    - To create the docker container
+        ```bash
+        make setup
+        ```
+    - To start the router and docker containers
+        ```bash
+        make start
+        ```
+    - To stop the containers
+        ```bash
+        make stop
+        ```
+
+- To view the load balander stats, open the following URL in your browser
+    ```
+    http://localhost:8404/monitor
+    ```
+    This will show the status of the containers and the load balancer metrics
+
+
 ## TODOs
 - [x] Add Whisper model support
     - [x] Add support for sending audios using openai client
@@ -67,3 +90,4 @@ To deploy the application using Docker, follow these steps:
 - [ ] Add script for automated deployments using core load and stress testing
 - [ ] Add Kubernetes manifests for orchestrated deployments with resource management
 - [ ] Add monitoring using Prometheus and Grafana for real-time performance tracking
+- [ ] Performance tuning and optimization for low-latency serving

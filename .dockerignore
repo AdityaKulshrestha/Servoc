@@ -55,3 +55,9 @@ htmlcov/
 # Benchmarking
 benchmark
 tests
+
+# Models
+models/
+
+# Profiling output
+result.json
