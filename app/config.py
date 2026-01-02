@@ -15,7 +15,7 @@ class EngineConfig:
     """Configuration for the inference engine"""
     # model_path: Optional[str] = "openai/whisper-large-v3"
     # model_type: str = "whisper"
-    model_path: Optional[str] = "models/hindi.pt"
+    model_path: Optional[str] = "asr_models/hindi.pt"
     model_type: str = "wav2vec2"
     device: str = "cpu"
     language: str = "hindi"

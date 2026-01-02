@@ -40,6 +40,21 @@ To deploy the application using Docker, follow these steps:
     ```
 
 ## Architecture
+
+Servoc Architecture
+![Servoc Architecture](./assets/architecture.png)
+
+1. The FastAPI application receives incoming requests and performs initial preprocessing.
+2. Requests are added to an inference queue for processing.
+3. A separate batcher running on another thread continuously monitors the inference queue.
+4. The batcher collects requests from the queue and forms batches based on predefined criteria such as maximum batch size and maximum wait time.
+5. Once a batch is formed, it is sent to a separate pool of worker processes for inference.
+6. The results are processed and sent back to the FastAPI application.
+
+
+## Multi instance deployment with Load Balancing
+To efficiently utilize CPU resources and ensure optimal performance, Servoc employs a multi-instance deployment strategy combined with load balancing. The architecture consists of the following components:
+
 1. HAProxy with custom load balancing logic based on CPU core utilization.
 2. Python daemon to monitor CPU core usage and provide metrics to HAProxy.
 3. FastAPI application serving the voice models with CPU core pinning and NUMA awareness.
@@ -85,8 +100,7 @@ To deploy the application using Docker, follow these steps:
 - [x] Test the initial whisper model support
 - [x] Add Dockerfile for containerized deployments with CPU core pinning and NUMA awareness
 - [x] Add ~~nginx~~HAProxy for load balancing based on custom logic of core utilization
-- [ ] Add IndicParler TTS
-- [ ] Evaluate the performance on IndicParler TTS
+- [ ] Add FastSpeech2_HS TTS
 - [ ] Add script for automated deployments using core load and stress testing
 - [ ] Add Kubernetes manifests for orchestrated deployments with resource management
 - [ ] Add monitoring using Prometheus and Grafana for real-time performance tracking
